@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { useState } from "react";
 import GlobalStyle from "../assets/globalstyle";
-import Login from "./Login";
 import Cadastro from "./Cadastro";
 import UserContext from "./UserContext";
 
@@ -16,7 +15,6 @@ function App() {
         <GlobalStyle />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Login />} />
             <Route path="/cadastro" element={<Cadastro />} />
           </Routes>
         </BrowserRouter>
