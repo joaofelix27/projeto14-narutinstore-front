@@ -25,7 +25,7 @@ export default function Cadastro() {
       return;
     }
     if (email !== "" && testeCPF) {
-      const URL = `https://narutinstore-api.herokuapp.com/cadastro`;
+      const URL = `http://localhost/cadastro`;
       const profileData = {
         email: email,
         cpf: cpf,

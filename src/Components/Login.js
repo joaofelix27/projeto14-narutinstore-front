@@ -15,7 +15,7 @@ function Login() {
     event.preventDefault();
 
     if (email !== "") {
-      const URL = `https://narutinstore-api.herokuapp.com/login`;
+      const URL = `http://localhost:5000/login`;
       const profileData = {
         email: email,
         password: senha,
@@ -39,8 +39,8 @@ function Login() {
     return (
       <>
         <form>
-          <input type="email" placeholder="E-mail" onChange={(e) => setEmail(e.target.value)}></input>
-          <input type="password" placeholder="Senha" onChange={(e) => setSenha(e.target.value)}></input>
+          <input type="email" placeholder="E-mail" required onChange={(e) => setEmail(e.target.value)}></input>
+          <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)}></input>
           <button type="submit">Entrar</button>
         </form>
         <Link to="/cadastro" style={{ textDecoration: 'none' }} >
