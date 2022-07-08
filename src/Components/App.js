@@ -4,6 +4,7 @@ import GlobalStyle from "../assets/globalstyle";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
 import Produto from  './Produto'
+import Home from "./Home";
 import UserContext from "./UserContext";
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/register" element={<Cadastro />} />
+            <Route path="/" element={<Home/>}/>
             <Route path="/login" element={<Login />} />
             <Route path="/products/:name" element={<Produto />} />
           </Routes>
