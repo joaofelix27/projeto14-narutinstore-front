@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import {Link} from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import logo from "../assets/images/logoNarutin.png"
 
 export default function Home(){
+    const[inventory, setInventory] = useState([])
+
+    useEffect(()=>{
+    const promise = axios.get("http://localhost:5000/products");
+    promise.then(response=>setInventory(response.data))
+    },[])
 
     function Product({image, name, value}){
         const formatter = new Intl.NumberFormat('pt-br', {
@@ -18,6 +24,27 @@ export default function Home(){
                 <p>{formatter.format(value)}</p>
             </ProductBox>
         )
+    }
+
+    function renderHighlights(){
+        const decreasingValue=inventory.sort((a,b)=>b.value-a.value);
+        const highlights= decreasingValue.slice(0,5);
+
+        return highlights.map(product=><Product image={product.image} name={product.name} value={product.value}/>)
+    }
+
+    function renderHighlights(){
+        const decreasingValue=inventory.sort((a,b)=>b.value-a.value);
+        const highlights= decreasingValue.slice(0,5);
+
+        return highlights.map(product=><Product image={product.image} name={product.name} value={product.value}/>)
+    }
+
+    function renderInterestProduct(){
+        const crescentValue=inventory.sort((a,b)=>a.value-b.value);
+        const interestProduct= crescentValue.slice(0,15);
+
+        return interestProduct.map(product=><Product image={product.image} name={product.name} value={product.value}/>)
     }
 
     return (
@@ -35,47 +62,11 @@ export default function Home(){
             <SubTitle>Em destaque</SubTitle>
             <HighlightsList>
                 <Product image="https://http2.mlstatic.com/D_NQ_NP_694288-MLB44232499133_122020-O.webp" name="Cosplay Do Naruto Modo Sennin" value={400}/>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
+                {renderHighlights()}
             </HighlightsList>
             <SubTitle>Talvez se interesse por</SubTitle>
             <GridProdutos>
-            <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
-                <ProductBox>
-                </ProductBox>
+                {renderInterestProduct()}
             </GridProdutos>
         </Main>
     )
@@ -140,8 +131,9 @@ const HighlightsList= styled.div`
 `
 
 const ProductBox= styled.div`
-    height:210px;
-    min-width: 170px;
+    min-height:210px;
+    width: 170px;
+    word-wrap: break-word;
     background-color: #F47213;
     display:flex;
     flex-direction: column;
@@ -150,7 +142,7 @@ const ProductBox= styled.div`
     padding: 6px;
 
     img{
-        width: 100%;
+        width: 158px;
         height: 65%;
         border-radius: 5px;
     }
@@ -159,7 +151,6 @@ const ProductBox= styled.div`
         color:#000000;
         font-weight: 700;
         font-size:14px;
-        margin-bottom: 5px;
     }
 `
 const SubTitle= styled.h1`
