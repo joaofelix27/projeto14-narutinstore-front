@@ -11,7 +11,7 @@ export default function Home(){
     useEffect(()=>{
     const promise = axios.get("http://localhost:5000/products");
     promise.then(response=>setInventory(response.data.sort((a,b)=>b.value-a.value)))
-    },[])
+    },[]);
 
     function Product({image, name, value}){
         const formatter = new Intl.NumberFormat('pt-br', {
