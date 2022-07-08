@@ -24,6 +24,7 @@ export default function Cadastro() {
       const URL = `https://narutinstore-api.herokuapp.com/cadastro`;
       const profileData = {
         email: email,
+        cpf: cpf,
         name: nome,
         password: senha,
       };
@@ -61,8 +62,10 @@ export default function Cadastro() {
             onChange={(e) => setEmail(e.target.value)}
           ></input>
           <input
-            type="email"
+            type="text"
             placeholder="CPF"
+            pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})"
+            title="Digite um CPF no formato: xxx.xxx.xxx-xx"
             onChange={(e) => setCPF(e.target.value)}
           ></input>
           <input
@@ -77,7 +80,7 @@ export default function Cadastro() {
           ></input>
           <button type="submit">Cadastrar</button>
         </form>
-        <Link to="/" style={{ textDecoration: "none" }}>
+        <Link to="/login" style={{ textDecoration: "none" }}>
           <h1>Já tem uma conta? Entre agora!</h1>
         </Link>
       </>
@@ -112,9 +115,9 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width:150px;
+  width: 150px;
   div {
-      margin-top:17px;
+    margin-top: 17px;
     h1 {
       font-family: Permanent Marker;
       font-size: 32px;
