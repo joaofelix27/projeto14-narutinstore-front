@@ -1,15 +1,16 @@
 import { useState, useEffect} from "react";
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import logo from "../assets/images/logoNarutin.png"
 
 export default function Home(){
-    const[inventory, setInventory] = useState([])
+    const[inventory, setInventory] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(()=>{
     const promise = axios.get("http://localhost:5000/products");
-    promise.then(response=>setInventory(response.data))
+    promise.then(response=>setInventory(response.data.sort((a,b)=>b.value-a.value)))
     },[])
 
     function Product({image, name, value}){
@@ -18,33 +19,24 @@ export default function Home(){
             currency: 'BRL'
         });
         return(
-            <ProductBox>
-                <img src={image} alt={name} />
-                <p>{name}</p>
-                <p>{formatter.format(value)}</p>
-            </ProductBox>
+                <ProductBox onClick={()=>navigate(`/products/${name}`)}>
+                    <img src={image} alt={name} />
+                    <p>{name}</p>
+                    <p>{formatter.format(value)}</p>
+                </ProductBox>
         )
     }
 
     function renderHighlights(){
-        const decreasingValue=inventory.sort((a,b)=>b.value-a.value);
-        const highlights= decreasingValue.slice(0,5);
+        const highlights= inventory.slice(0,5);
 
-        return highlights.map(product=><Product image={product.image} name={product.name} value={product.value}/>)
-    }
-
-    function renderHighlights(){
-        const decreasingValue=inventory.sort((a,b)=>b.value-a.value);
-        const highlights= decreasingValue.slice(0,5);
-
-        return highlights.map(product=><Product image={product.image} name={product.name} value={product.value}/>)
+        return highlights.map(product=><Product id={product._id} image={product.image} name={product.name} value={product.value}/>)
     }
 
     function renderInterestProduct(){
-        const crescentValue=inventory.sort((a,b)=>a.value-b.value);
-        const interestProduct= crescentValue.slice(0,15);
+        const interestProduct= inventory.slice(5,20);
 
-        return interestProduct.map(product=><Product image={product.image} name={product.name} value={product.value}/>)
+        return interestProduct.map(product=><Product id={product._id} image={product.image} name={product.name} value={product.value}/>)
     }
 
     return (
@@ -55,13 +47,12 @@ export default function Home(){
                     <h1>Narutin</h1>
                 </div>
                 <div>
-                    <ion-icon name="person"></ion-icon>
-                    <ion-icon name="cart"></ion-icon>
+                    <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
+                    <ion-icon name="cart" onClick={()=>navigate("/cart")}></ion-icon>
                 </div>
             </Header>
             <SubTitle>Em destaque</SubTitle>
             <HighlightsList>
-                <Product image="https://http2.mlstatic.com/D_NQ_NP_694288-MLB44232499133_122020-O.webp" name="Cosplay Do Naruto Modo Sennin" value={400}/>
                 {renderHighlights()}
             </HighlightsList>
             <SubTitle>Talvez se interesse por</SubTitle>
@@ -74,6 +65,7 @@ export default function Home(){
 
 const Main = styled.div`
     padding-top: 105px;
+    padding-bottom: 25px;
     display: flex;
     flex-direction: column;
     min-width:100vw;
@@ -153,6 +145,7 @@ const ProductBox= styled.div`
         font-size:14px;
     }
 `
+
 const SubTitle= styled.h1`
     font-family: 'Permanent Marker';
     font-weight: 400;
