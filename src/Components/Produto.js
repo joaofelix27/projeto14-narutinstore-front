@@ -1,65 +1,40 @@
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Narutin from "../assets/narutin.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Produto() {
-    const { name } = useParams();
+  const { name } = useParams();
+  const [product, setProduct] = useState([]);
   const navigate = useNavigate();
 
-//   function fazerCadastro(event) {
-//     event.preventDefault();
-//     const testeCPF = TestaCPF(cpf);
-//     if (senha !== senhaconf) {
-//       alert("Senhas não conferem");
-//       return;
-//     }
-//     if (!testeCPF) {
-//       alert("CPF Inválido!");
-//       return;
-//     }
-//     if (email !== "" && testeCPF) {
-//       const URL = `http://localhost/register`;
-//       const profileData = {
-//         email: email,
-//         cpf: cpf,
-//         name: nome,
-//         password: senha,
-//       };
-//       const promise = axios.post(URL, profileData);
-//       promise
-//         .then((response) => {
-//           console.log(response);
-//           if (response.status === 201) {
-//             alert("E-mail cadastrado!");
-//             navigate("/login");
-//           }
-//         })
-//         .catch((err) => {
-//           if (err.response.status === 409) {
-//             alert("E-mail já cadastrado!");
-//           } else if (err.response.status === 408){
-//             alert("CPF já cadastrado!");
-//           } else {
-//             alert("Erro no cadastro!");
-//           }
-//         });
-//     }
-//   }
-//   const formularioCadastro = montarFormularioCadastro();
+  useEffect(() => {
+    const URL = `http://localhost:5000/products/${name}`;
+    const promise = axios.get(URL);
+    promise
+      .then((response) => {
+        const { data } = response;
+        console.log(data);
+        setProduct(data);
+      })
+      .catch((err) => {
+        console.log("Carregando");
+      });
+  }, []);
   return (
     <Container>
       <Header>
         <img src={Narutin} />
-        <div>
-          <h1>{name}</h1>
-        </div>
+        <div></div>
       </Header>
-      {/* <FormularioCadastro onSubmit={fazerCadastro}>
-        {formularioCadastro}
-      </FormularioCadastro> */}
+      <Body>
+        <div>
+          {product.length !== 0 ? <img src={product[0].image} /> : "careegando"}
+        </div>
+        <h1>{name}</h1>
+      </Body>
     </Container>
   );
 }
@@ -71,12 +46,16 @@ const Container = styled.div`
   height: 100vh;
   cursor: pointer;
   padding-top: 95px;
+  background-color: #000000;
 `;
 const Header = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 150px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 90px;
+  background-color: #f47213;
   div {
     margin-top: 17px;
     h1 {
@@ -91,53 +70,16 @@ const Header = styled.div`
     width: 70px;
   }
 `;
-const FormularioCadastro = styled.div`
-  padding-top: 28px;
-  form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  input {
-    height: 58px;
-    width: 326px;
-    border-radius: 5px;
-    background-color: #000000;
-    border: 0px;
-    margin-bottom: 13px;
-    font-family: Raleway;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: 23px;
-    letter-spacing: 0em;
-    text-align: left;
-    color: #ffffff;
-
-    padding: 16px;
-  }
-  button {
-    border: 0px;
-    background-color: #ea8b1c;
-    height: 46px;
-    width: 326px;
-    border-radius: 5px;
-    font-family: Raleway;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 23px;
-    letter-spacing: 0em;
-    color: #000000;
-    margin-bottom: 32px;
-  }
-  h1 {
-    font-family: Raleway;
-    font-size: 15px;
-    font-weight: 700;
-    line-height: 18px;
-    color: #000000;
-    text-align: center;
-  }
+const Body = styled.div`
+img{
+    width:80px;
+    height:80px
+}
+  display: flex;
+  border-radius: 10px;
+  margin: 0 20px;
+  margin-top: 30px;
+  width: 80%;
+  height: 80%;
+  background-color: #fafafa;
 `;
