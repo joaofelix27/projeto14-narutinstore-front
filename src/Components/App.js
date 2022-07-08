@@ -3,6 +3,7 @@ import { useState } from "react";
 import GlobalStyle from "../assets/globalstyle";
 import Cadastro from "./Cadastro";
 import Login from "./Login";
+import Produto from  './Produto'
 import UserContext from "./UserContext";
 
 function App() {
@@ -16,8 +17,9 @@ function App() {
         <GlobalStyle />
         <BrowserRouter>
           <Routes>
-            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/register" element={<Cadastro />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/products/:name" element={<Produto />} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>
