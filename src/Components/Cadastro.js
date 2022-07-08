@@ -25,7 +25,7 @@ export default function Cadastro() {
       return;
     }
     if (email !== "" && testeCPF) {
-      const URL = `http://localhost/cadastro`;
+      const URL = `http://localhost/register`;
       const profileData = {
         email: email,
         cpf: cpf,

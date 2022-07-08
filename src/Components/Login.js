@@ -43,7 +43,7 @@ function Login() {
           <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)}></input>
           <button type="submit">Entrar</button>
         </form>
-        <Link to="/cadastro" style={{ textDecoration: 'none' }} >
+        <Link to="/register" style={{ textDecoration: 'none' }} >
           <h1>Primeira vez? Cadastre-se!</h1>
         </Link>
       </>
