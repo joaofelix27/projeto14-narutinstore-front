@@ -15,12 +15,16 @@ export default function Cadastro() {
 
   function fazerCadastro(event) {
     event.preventDefault();
-
+    const testeCPF = TestaCPF(cpf);
     if (senha !== senhaconf) {
       alert("Senhas não conferem");
       return;
     }
-    if (email !== "") {
+    if (!testeCPF) {
+      alert("CPF Inválido!");
+      return;
+    }
+    if (email !== "" && testeCPF) {
       const URL = `https://narutinstore-api.herokuapp.com/cadastro`;
       const profileData = {
         email: email,
@@ -46,6 +50,52 @@ export default function Cadastro() {
         });
     }
   }
+  function TestaCPF(strCPF) {
+    let Soma;
+    let Resto;
+    Soma = 0;
+    if (
+      cpf.length != 11 ||
+      cpf == "00000000000" ||
+      cpf == "11111111111" ||
+      cpf == "22222222222" ||
+      cpf == "33333333333" ||
+      cpf == "44444444444" ||
+      cpf == "55555555555" ||
+      cpf == "66666666666" ||
+      cpf == "77777777777" ||
+      cpf == "88888888888" ||
+      cpf == "99999999999"
+    ) {
+      return false;
+    }
+
+    for (let i = 1; i <= 9; i++) {
+      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
+      Resto = (Soma * 10) % 11;
+    }
+
+    if (Resto == 10 || Resto == 11) {
+      Resto = 0;
+    }
+    if (Resto != parseInt(strCPF.substring(9, 10))) {
+      return false;
+    }
+
+    Soma = 0;
+    for (let i = 1; i <= 10; i++) {
+      Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
+      Resto = (Soma * 10) % 11;
+    }
+
+    if (Resto == 10 || Resto == 11) {
+      Resto = 0;
+    }
+    if (Resto != parseInt(strCPF.substring(10, 11))) {
+      return false;
+    }
+    return true;
+  }
 
   function montarFormularioCadastro() {
     return (
@@ -53,28 +103,33 @@ export default function Cadastro() {
         <form>
           <input
             type="text"
+            required
             placeholder="Nome"
             onChange={(e) => setNome(e.target.value)}
           ></input>
           <input
             type="email"
+            required
             placeholder="E-mail"
             onChange={(e) => setEmail(e.target.value)}
           ></input>
           <input
-            type="text"
+            type="number"
             placeholder="CPF"
+            required
             pattern="(\d{3}\.?\d{3}\.?\d{3}-?\d{2})|(\d{2}\.?\d{3}\.?\d{3}/?\d{4}-?\d{2})"
             title="Digite um CPF no formato: xxx.xxx.xxx-xx"
             onChange={(e) => setCPF(e.target.value)}
           ></input>
           <input
             type="password"
+            required
             placeholder="Senha"
             onChange={(e) => setSenha(e.target.value)}
           ></input>
           <input
             type="password"
+            required
             placeholder="Confirme a senha"
             onChange={(e) => setSenhaconf(e.target.value)}
           ></input>
