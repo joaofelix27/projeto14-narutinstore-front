@@ -28,6 +28,7 @@ function Login() {
         window.localStorage.setItem("dadosLogin", dadosLoginString);
         window.localStorage.setItem("name", nameString);
         setToken(data.token)
+        navigate("/")
       }).catch((err) => {
         alert("Erro no Login, dados incorretos!");
       });

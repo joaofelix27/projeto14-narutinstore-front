@@ -34,7 +34,7 @@ export default function Cadastro() {
           console.log(response);
           if (response.status === 201) {
             alert("E-mail cadastrado!");
-            navigate("/");
+            navigate("/login");
           }
         })
         .catch((err) => {
