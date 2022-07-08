@@ -44,6 +44,8 @@ export default function Cadastro() {
         .catch((err) => {
           if (err.response.status === 409) {
             alert("E-mail já cadastrado!");
+          } else if (err.response.status === 408){
+            alert("CPF já cadastrado!");
           } else {
             alert("Erro no cadastro!");
           }
@@ -55,17 +57,17 @@ export default function Cadastro() {
     let Resto;
     Soma = 0;
     if (
-      cpf.length != 11 ||
-      cpf == "00000000000" ||
-      cpf == "11111111111" ||
-      cpf == "22222222222" ||
-      cpf == "33333333333" ||
-      cpf == "44444444444" ||
-      cpf == "55555555555" ||
-      cpf == "66666666666" ||
-      cpf == "77777777777" ||
-      cpf == "88888888888" ||
-      cpf == "99999999999"
+      cpf.length !== 11 ||
+      cpf === "00000000000" ||
+      cpf === "11111111111" ||
+      cpf === "22222222222" ||
+      cpf === "33333333333" ||
+      cpf === "44444444444" ||
+      cpf === "55555555555" ||
+      cpf === "66666666666" ||
+      cpf === "77777777777" ||
+      cpf === "88888888888" ||
+      cpf === "99999999999"
     ) {
       return false;
     }
@@ -75,7 +77,7 @@ export default function Cadastro() {
       Resto = (Soma * 10) % 11;
     }
 
-    if (Resto == 10 || Resto == 11) {
+    if (Resto === 10 || Resto === 11) {
       Resto = 0;
     }
     if (Resto != parseInt(strCPF.substring(9, 10))) {
