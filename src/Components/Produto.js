@@ -1,16 +1,28 @@
 import styled from "styled-components";
 import { Link, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import UserContext from "./UserContext";
 import Narutin from "../assets/narutin.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Produto() {
   const { name } = useParams();
   const [product, setProduct] = useState([]);
+  const [frete, setFrete] = useState(0);
   const [cep, setCep] = useState("");
   const navigate = useNavigate();
+  const { chosenProducts, setChosenProducts } = useContext(UserContext);
   const [value, setValue] = useState(0);
+
+  function adicionarCarrinho() {
+    const newProducts = [...chosenProducts];
+    newProducts.push(product);
+    console.log(newProducts);
+    setChosenProducts(newProducts);
+    const strProducts = JSON.stringify(newProducts);
+    window.localStorage.setItem("Products", strProducts);
+  }
 
   function descobreFrete(regiao) {
     let frete = 0;
@@ -32,7 +44,6 @@ export default function Produto() {
   function descobreCEP(event) {
     event.preventDefault();
     if (cep.length === 8) {
-      
       const URL = `https://viacep.com.br/ws/${cep}/json/`;
       const promise = axios.get(URL);
       if (cep !== 0) {
@@ -45,13 +56,9 @@ export default function Produto() {
             promisseIBGE
               .then((res) => {
                 const sigla = res.data.sigla;
-                const frete = descobreFrete(sigla);
+                const freteRegiao = descobreFrete(sigla);
+                setFrete(freteRegiao);
                 setCep("");
-                if (!frete) {
-                  alert(`CEP INVÁLIDO`);
-                } else {
-                  alert(`O frete para sua região é R$ ${frete}`);
-                }
               })
               .catch((err0) => {
                 console.log("Erro IBGE");
@@ -61,7 +68,9 @@ export default function Produto() {
             console.log("Carregando");
           });
       }
-    } else {alert(`CEP INVÁLIDO`);}
+    } else {
+      setFrete("")
+    }
   }
 
   useEffect(() => {
@@ -102,7 +111,7 @@ export default function Produto() {
             </div>
           </Value>
           <Purchase>
-            <div>
+            <div onClick={adicionarCarrinho}>
               <ion-icon name="cart-outline"></ion-icon>
               <h1>COMPRAR</h1>
             </div>
@@ -112,14 +121,25 @@ export default function Produto() {
           <Adress>
             <h1>Consultar frete e prazo de entrega</h1>
             <form onSubmit={descobreCEP}>
-              <input
-                type="text"
-                placeholder="Digite seu CEP..."
-                value={cep}
-                pattern="[0-9]+"
-                onChange={(e) => setCep(e.target.value)}
-                title={"Digite apenas os 8 números do CEP"}
-              ></input>
+              <CEP frete={frete}>
+                <input
+                  type="text"
+                  placeholder="Digite seu CEP..."
+                  value={cep}
+                  pattern="[0-9]+"
+                  onChange={(e) => setCep(e.target.value)}
+                  title={"Digite apenas os 8 números do CEP"}
+                ></input>
+                <span>
+                  {" "}
+                  {frete === 0
+                    ? ""
+                    : frete === ""
+                    ? "CEP Inválido!"
+                    : `Valor do frete: R$ ${frete}`}
+                </span>
+              </CEP>
+
               <button type="submit">OK</button>
               <a
                 target="_blank"
@@ -293,10 +313,15 @@ const Adress = styled.div`
     color: #000000;
   }
   form {
+    margin-top:13px;
+    margin-bottom:2px;
     display: flex;
-    align-items: center;
+    align-items:top;
     justify-content: space-between;
+    border: 0px;
     a {
+      margin-top:10px;
+      width: 40%;
       font-family: "Poppins", sans-serif;
       font-size: 12px;
       font-weight: 700;
@@ -315,30 +340,6 @@ const Adress = styled.div`
       font-size: 14px;
       letter-spacing: 0em;
       border-radius: 5px;
-    }
-    input {
-      margin-top: 13px;
-      margin-bottom: 13px;
-      height: 20px;
-      width: 50%;
-      border-radius: 5px;
-      background: rgb(255, 161, 53);
-      background: linear-gradient(
-        90deg,
-        rgba(255, 161, 53, 1) 0%,
-        rgba(255, 158, 0, 1) 34%,
-        rgba(249, 125, 0, 1) 93%
-      );
-      border: 0px;
-      font-family: Raleway;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 23px;
-      letter-spacing: 0em;
-      text-align: left;
-      color: #fafafa;
-      padding: 16px;
-      border: 2px solid #f47213;
     }
   }
 `;
@@ -366,4 +367,39 @@ const Purchase = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+`;
+
+const CEP = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 45%;
+  input {
+    height: 20px;
+    border-radius: 5px;
+    background: rgb(255, 161, 53);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 161, 53, 1) 0%,
+      rgba(255, 158, 0, 1) 34%,
+      rgba(249, 125, 0, 1) 93%
+    );
+    border: 2px solid #f47213;
+    font-family: Raleway;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #fafafa;
+    padding: 16px;
+  }
+  span {
+    font-family: "Poppins", sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 18px;
+    text-align:center;
+    letter-spacing: 0em;
+    color: ${props => props.frete === "" ? "#ff0000": "#000000"} ;
+  }
 `;

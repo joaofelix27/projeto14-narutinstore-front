@@ -7,7 +7,7 @@ import axios from "axios";
 import Narutin from "../assets/narutin.png";
 
 function Login() {
-  const { token, setToken } = useContext(UserContext);
+  const { login, setLogin } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
@@ -23,11 +23,10 @@ function Login() {
       const promise = axios.post(URL, profileData);
       promise.then((response) => {
         const { data} =response
-        const dadosLoginString = JSON.stringify(data.token);
-        const nameString = JSON.stringify(data.name);
-        window.localStorage.setItem("dadosLogin", dadosLoginString);
-        window.localStorage.setItem("name", nameString);
-        setToken(data.token)
+        const loginData= {... data}
+        const strLoginData = JSON.stringify(data);
+        window.localStorage.setItem("loginData", strLoginData);
+        setLogin(loginData)
         navigate("/")
       }).catch((err) => {
         alert("Erro no Login, dados incorretos!");
