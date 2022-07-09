@@ -31,6 +31,7 @@ export default function Produto() {
     setChosenProducts(newProducts);
     const strProducts = JSON.stringify(newProducts);
     window.localStorage.setItem("Products", strProducts);
+    navigate("/cart")
   }
 
   function descobreFrete(regiao) {
@@ -137,7 +138,7 @@ export default function Produto() {
         </ProductBody>
         <Bottom>
           <Adress>
-            <h1>Consultar frete e prazo de entrega</h1>
+            <h1>Consultar valor do frete </h1>
             <form onSubmit={descobreCEP}>
               <CEP frete={frete}>
                 <input
