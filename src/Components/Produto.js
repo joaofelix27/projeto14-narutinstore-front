@@ -11,14 +11,23 @@ export default function Produto() {
   const [product, setProduct] = useState([]);
   const [frete, setFrete] = useState(0);
   const [cep, setCep] = useState("");
+  const [qtd, setQtd] = useState("");
   const navigate = useNavigate();
   const { chosenProducts, setChosenProducts } = useContext(UserContext);
   const [value, setValue] = useState(0);
 
-  function adicionarCarrinho() {
+  function adicionarCarrinho(event) {
+    setQtd("");
+    event.preventDefault()
     const newProducts = [...chosenProducts];
-    newProducts.push(product);
-    console.log(newProducts);
+    const currentProduct = {... product}
+    const repeatedProduct=  chosenProducts.findIndex( value => value.name===product.name )
+    if (repeatedProduct !==-1) {
+      newProducts[repeatedProduct].quantityPurchased+=Number(qtd)
+    } else {
+      currentProduct.quantityPurchased=Number(qtd)
+      newProducts.push(currentProduct)
+    }
     setChosenProducts(newProducts);
     const strProducts = JSON.stringify(newProducts);
     window.localStorage.setItem("Products", strProducts);
@@ -69,7 +78,7 @@ export default function Produto() {
           });
       }
     } else {
-      setFrete("")
+      setFrete("");
     }
   }
 
@@ -110,11 +119,20 @@ export default function Produto() {
               <h3> {`Em estoque: ${product.quantity}`}</h3>
             </div>
           </Value>
-          <Purchase>
-            <div onClick={adicionarCarrinho}>
+          <Purchase onSubmit={adicionarCarrinho}>
+            <button type="submit">
               <ion-icon name="cart-outline"></ion-icon>
               <h1>COMPRAR</h1>
-            </div>
+            </button>
+            <input
+              type="number"
+              required
+              placeholder="Qntd"
+              value={qtd}
+              min="1"
+              onChange={(e) => setQtd(e.target.value)}
+              title={"Digite a quantidade"}
+            ></input>
           </Purchase>
         </ProductBody>
         <Bottom>
@@ -125,6 +143,7 @@ export default function Produto() {
                 <input
                   type="text"
                   placeholder="Digite seu CEP..."
+                  required
                   value={cep}
                   pattern="[0-9]+"
                   onChange={(e) => setCep(e.target.value)}
@@ -313,14 +332,14 @@ const Adress = styled.div`
     color: #000000;
   }
   form {
-    margin-top:13px;
-    margin-bottom:2px;
+    margin-top: 13px;
+    margin-bottom: 2px;
     display: flex;
-    align-items:top;
+    align-items: top;
     justify-content: space-between;
     border: 0px;
     a {
-      margin-top:10px;
+      margin-top: 10px;
       width: 40%;
       font-family: "Poppins", sans-serif;
       font-size: 12px;
@@ -343,13 +362,35 @@ const Adress = styled.div`
     }
   }
 `;
-const Purchase = styled.div`
-  div {
+const Purchase = styled.form`
+  display: flex;
+  input {
+    width:20%;
+    height: 36px;
+    border-radius: 5px;
+    background: rgb(255, 161, 53);
+    background: linear-gradient(
+      90deg,
+      rgba(255, 161, 53, 1) 0%,
+      rgba(255, 158, 0, 1) 34%,
+      rgba(249, 125, 0, 1) 93%
+    );
+    border: 2px solid #f47213;
+    font-family: Raleway;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #fafafa;
+  }
+  button {
     display: flex;
     align-items: center;
     justify-content: center;
     height: 36px;
-    width: 100%;
+    width: 85%;
+    margin-right:5px;
     border: 1px solid #f47213;
     color: #f47213;
     font-weight: 700;
@@ -398,8 +439,8 @@ const CEP = styled.div`
     font-size: 10px;
     font-weight: 700;
     line-height: 18px;
-    text-align:center;
+    text-align: center;
     letter-spacing: 0em;
-    color: ${props => props.frete === "" ? "#ff0000": "#000000"} ;
+    color: ${(props) => (props.frete === "" ? "#ff0000" : "#000000")};
   }
 `;
