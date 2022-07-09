@@ -52,8 +52,9 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Raleway', sans-serif;
     font-family: "Roboto";
     font-family: 'Saira Stencil One', cursive;
+    font-family: 'Permanent Marker', cursive;
+    font-family: 'Poppins', sans-serif;
     background-color: #F47213;
-
 ;
   }
   *{

@@ -8,7 +8,25 @@ import { useNavigate } from "react-router-dom";
 export default function Produto() {
   const { name } = useParams();
   const [product, setProduct] = useState([]);
+  const [cep, setCep] = useState(0);
   const navigate = useNavigate();
+  const [value, setValue] = useState(0);
+
+  function descobreCEP(event) {
+    event.preventDefault();
+    const URL = `https://viacep.com.br/ws/${cep}/json/`;
+    const promise = axios.get(URL);
+    if (cep !== 0) {
+      promise
+        .then((response) => {
+          const { data } = response;
+          console.log(data);
+        })
+        .catch((err) => {
+          console.log("Carregando");
+        });
+    }
+  }
 
   useEffect(() => {
     const URL = `http://localhost:5000/products/${name}`;
@@ -17,6 +35,8 @@ export default function Produto() {
       .then((response) => {
         const { data } = response;
         console.log(data);
+        const valor = Number(data.value).toFixed(2).replace(".", ",");
+        setValue(valor);
         setProduct(data);
       })
       .catch((err) => {
@@ -41,18 +61,33 @@ export default function Produto() {
           </Image>
           <Value>
             <h2> {product.description}</h2>
-            <h1> {`R$ ${product.value},00`}</h1>
+            <h1> {`R$ ${value}`}</h1>
           </Value>
+          <Purchase>
+            <div>
+              <ion-icon name="cart-outline"></ion-icon>
+              <h1>COMPRAR</h1>
+            </div>
+          </Purchase>
         </ProductBody>
         <Bottom>
           <Adress>
             <h1>Consultar frete e prazo de entrega</h1>
-            <input type="number" placeholder="Digite seu CEP..."></input>
+            <form onSubmit={descobreCEP}>
+              <input
+                type="number"
+                placeholder="Digite seu CEP..."
+                onChange={(e) => setCep(e.target.value)}
+              ></input>
+              <button type="submit">OK</button>
+              <a
+                target="_blank"
+                href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
+              >
+                Não lembro meu CEP
+              </a>
+            </form>
           </Adress>
-          <Purchase>
-            <button>COMPRAR</button>
-            <button>VOLTAR PARA LISTA DE PRODUTOS</button>
-          </Purchase>
         </Bottom>
       </Body>
     </Container>
@@ -62,9 +97,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  height: auto;
   cursor: pointer;
   padding-top: 95px;
+  padding-bottom: 100px;
   background-color: #000000;
 `;
 const Header = styled.div`
@@ -103,19 +139,19 @@ const Body = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  margin: 0 20px;
-  margin-top: 40px;
-  width: 80%;
-  height: 80%;
+  margin: 20px;
+  margin-bottom: 30px;
+  width: 95%;
+  height: auto;
   background-color: #fafafa;
-  padding: 20px;
+  padding: 6px;
 `;
 const Description = styled.div`
   display: flex;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 5px;
+  margin-bottom: 5px;
   h1 {
-    font-family: Raleway;
+    font-family: "Poppins", sans-serif;
     font-size: 20px;
     font-weight: 700;
     line-height: 23px;
@@ -127,7 +163,10 @@ const Description = styled.div`
 const ProductBody = styled.div`
   display: flex;
   width: 100%;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 const Image = styled.div`
   display: flex;
@@ -135,7 +174,8 @@ const Image = styled.div`
   justify-content: center;
   margin-top: 20px;
   border: 2px solid #f47213;
-  width: 50%;
+  width: 100%;
+  height: auto;
   border-radius: 10px;
   img {
     width: 100%;
@@ -151,50 +191,122 @@ const Value = styled.div`
     rgba(255, 158, 0, 1) 34%,
     rgba(249, 125, 0, 1) 93%
   );
-  padding: 20px;
+  word-wrap: break-word;
+  padding: 5px;
   border-radius: 10px;
-  margin-left: 30px;
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  margin-bottom: 10px;
   border: 2px solid #f47213;
-  width: 50%;
-  word-break: break-all;
+  width: 100%;
   h2 {
     font-family: Raleway;
-    font-size: 20px;
+    font-size: 12px;
     font-weight: 500;
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
     color: #000000;
-    margin-bottom: 20px;
   }
   h1 {
     font-family: Raleway;
-    font-size: 30px;
+    font-size: 22px;
     font-weight: 700;
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
     color: #000000;
-    margin-bottom: 20px;
   }
 `;
 const Bottom = styled.div`
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-top: 20px;
   width: 100%;
 `;
 const Adress = styled.div`
-  width: 50%;
   display: flex;
   flex-direction: column;
+  h1 {
+    font-family: "Poppins", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000000;
+  }
+  form {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    a {
+      font-family: "Poppins", sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 18px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #f47213;
+      text-decoration: underline;
+    }
+    button {
+      height: 36px;
+      border: 1px solid #f47213;
+      color: #f47213;
+      font-weight: 700;
+      font-family: "Poppins", sans-serif;
+      font-size: 14px;
+      letter-spacing: 0em;
+      border-radius: 5px;
+    }
+    input {
+      margin-top: 13px;
+      margin-bottom: 13px;
+      height: 20px;
+      width: 50%;
+      border-radius: 5px;
+      background: rgb(255, 161, 53);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 161, 53, 1) 0%,
+        rgba(255, 158, 0, 1) 34%,
+        rgba(249, 125, 0, 1) 93%
+      );
+      border: 0px;
+      font-family: Raleway;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 23px;
+      letter-spacing: 0em;
+      text-align: left;
+      color: #fafafa;
+      padding: 16px;
+      border: 2px solid #f47213;
+    }
+  }
 `;
 const Purchase = styled.div`
-  width: 50%;
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    width: 100%;
+    border: 1px solid #f47213;
+    color: #f47213;
+    font-weight: 700;
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
+    letter-spacing: 0em;
+    border-radius: 5px;
+    ion-icon {
+      font-size: 30px;
+      color: #f47213;
+      margin-right: 5px;
+    }
+  }
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
