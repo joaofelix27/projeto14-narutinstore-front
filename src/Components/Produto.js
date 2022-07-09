@@ -8,53 +8,60 @@ import { useNavigate } from "react-router-dom";
 export default function Produto() {
   const { name } = useParams();
   const [product, setProduct] = useState([]);
-  const [cep, setCep] = useState(0);
+  const [cep, setCep] = useState("");
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
 
-  function descobreFrete (regiao) {
-    let frete=0
-    if(regiao==="N"){
-      frete= "40,00"
+  function descobreFrete(regiao) {
+    let frete = 0;
+    if (regiao === "N") {
+      frete = "40,00";
+    } else if (regiao === "NE") {
+      frete = "80,00";
+    } else if (regiao === "SE") {
+      frete = "120,00";
+    } else if (regiao === "S") {
+      frete = "160,00";
+    } else if (regiao === "CO") {
+      frete = "100,00";
+    } else {
+      return "";
     }
-     else if(regiao==="NE"){
-      frete= "80,00"
-    }
-    else if(regiao==="SE"){
-      frete= "120,00"
-    }
-    else if(regiao==="S"){
-      frete= "160,00"
-    }
-    else{
-      frete= "100,00"
-    }
-    return frete
+    return frete;
   }
   function descobreCEP(event) {
     event.preventDefault();
-    const URL = `https://viacep.com.br/ws/${cep}/json/`;
-    const promise = axios.get(URL);
-    if (cep !== 0) {
-      promise
-        .then((response) => {
-          const { data } = response;
-          console.log(data.ibge);
-          const URL2 = `https://servicodados.ibge.gov.br/api/v1/localidades/regioes/${data.ibge}`;
-          const promisseIBGE= axios.get(URL2)
-          promisseIBGE.then(res => {
-            const sigla=res.data.sigla
-            const frete= descobreFrete(sigla)
-            alert(`O frete para sua região é R$ ${frete}`)
-          }).catch(err0 => {
-            console.log("Erro IBGE")
+    if (cep.length === 8) {
+      
+      const URL = `https://viacep.com.br/ws/${cep}/json/`;
+      const promise = axios.get(URL);
+      if (cep !== 0) {
+        promise
+          .then((response) => {
+            const { data } = response;
+            console.log(data.ibge);
+            const URL2 = `https://servicodados.ibge.gov.br/api/v1/localidades/regioes/${data.ibge}`;
+            const promisseIBGE = axios.get(URL2);
+            promisseIBGE
+              .then((res) => {
+                const sigla = res.data.sigla;
+                const frete = descobreFrete(sigla);
+                setCep("");
+                if (!frete) {
+                  alert(`CEP INVÁLIDO`);
+                } else {
+                  alert(`O frete para sua região é R$ ${frete}`);
+                }
+              })
+              .catch((err0) => {
+                console.log("Erro IBGE");
+              });
           })
-          
-        })
-        .catch((err) => {
-          console.log("Carregando");
-        });
-    }
+          .catch((err) => {
+            console.log("Carregando");
+          });
+      }
+    } else {alert(`CEP INVÁLIDO`);}
   }
 
   useEffect(() => {
@@ -63,7 +70,6 @@ export default function Produto() {
     promise
       .then((response) => {
         const { data } = response;
-        console.log(data);
         const valor = Number(data.value).toFixed(2).replace(".", ",");
         setValue(valor);
         setProduct(data);
@@ -90,7 +96,10 @@ export default function Produto() {
           </Image>
           <Value>
             <h2> {product.description}</h2>
-            <h1> {`R$ ${value}`}</h1>
+            <div>
+              <h1> {`R$ ${value}`}</h1>
+              <h3> {`Em estoque: ${product.quantity}`}</h3>
+            </div>
           </Value>
           <Purchase>
             <div>
@@ -104,9 +113,12 @@ export default function Produto() {
             <h1>Consultar frete e prazo de entrega</h1>
             <form onSubmit={descobreCEP}>
               <input
-                type="number"
+                type="text"
                 placeholder="Digite seu CEP..."
+                value={cep}
+                pattern="[0-9]+"
                 onChange={(e) => setCep(e.target.value)}
+                title={"Digite apenas os 8 números do CEP"}
               ></input>
               <button type="submit">OK</button>
               <a
@@ -229,6 +241,21 @@ const Value = styled.div`
   margin-bottom: 10px;
   border: 2px solid #f47213;
   width: 100%;
+  div {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+  }
+  h1 {
+    font-family: Raleway;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 23px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000000;
+  }
   h2 {
     font-family: Raleway;
     font-size: 12px;
@@ -238,10 +265,10 @@ const Value = styled.div`
     text-align: left;
     color: #000000;
   }
-  h1 {
+  h3 {
     font-family: Raleway;
-    font-size: 22px;
-    font-weight: 700;
+    font-size: 20px;
+    font-weight: 500;
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
