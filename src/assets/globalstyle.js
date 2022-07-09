@@ -53,9 +53,7 @@ const GlobalStyle = createGlobalStyle`
     font-family: "Roboto";
     font-family: 'Saira Stencil One', cursive;
     background-color: #F47213;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
 ;
   }
   *{
