@@ -12,6 +12,25 @@ export default function Produto() {
   const navigate = useNavigate();
   const [value, setValue] = useState(0);
 
+  function descobreFrete (regiao) {
+    let frete=0
+    if(regiao==="N"){
+      frete= "40,00"
+    }
+     else if(regiao==="NE"){
+      frete= "80,00"
+    }
+    else if(regiao==="SE"){
+      frete= "120,00"
+    }
+    else if(regiao==="S"){
+      frete= "160,00"
+    }
+    else{
+      frete= "100,00"
+    }
+    return frete
+  }
   function descobreCEP(event) {
     event.preventDefault();
     const URL = `https://viacep.com.br/ws/${cep}/json/`;
@@ -20,7 +39,17 @@ export default function Produto() {
       promise
         .then((response) => {
           const { data } = response;
-          console.log(data);
+          console.log(data.ibge);
+          const URL2 = `https://servicodados.ibge.gov.br/api/v1/localidades/regioes/${data.ibge}`;
+          const promisseIBGE= axios.get(URL2)
+          promisseIBGE.then(res => {
+            const sigla=res.data.sigla
+            const frete= descobreFrete(sigla)
+            alert(`O frete para sua região é R$ ${frete}`)
+          }).catch(err0 => {
+            console.log("Erro IBGE")
+          })
+          
         })
         .catch((err) => {
           console.log("Carregando");
