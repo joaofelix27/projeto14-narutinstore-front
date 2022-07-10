@@ -144,7 +144,6 @@ export default function Produto() {
                 <input
                   type="text"
                   placeholder="Digite seu CEP..."
-                  required
                   value={cep}
                   pattern="[0-9]+"
                   onChange={(e) => setCep(e.target.value)}
@@ -178,8 +177,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: auto;
-  cursor: pointer;
+  min-height:100vh;
   padding-top: 95px;
   padding-bottom: 100px;
   background-color: #000000;
