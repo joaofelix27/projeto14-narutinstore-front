@@ -132,6 +132,8 @@ export default function Cart() {
         localStorage.removeItem("Products");
         localStorage.removeItem("loginData");
         setUnLoged(true)
+        setLogOutBox(false)
+
 
         const config = {
             headers: {
