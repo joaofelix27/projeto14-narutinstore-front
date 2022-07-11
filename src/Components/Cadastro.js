@@ -25,7 +25,7 @@ export default function Cadastro() {
       return;
     }
     if (email !== "" && testeCPF) {
-      const URL = `http://localhost/register`;
+      const URL = `http://localhost:5000/register`;
       const profileData = {
         email: email,
         cpf: cpf,
@@ -165,7 +165,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   height: 100vh;
-  cursor: pointer;
   padding-top: 95px;
 `;
 const Header = styled.div`
@@ -181,6 +180,7 @@ const Header = styled.div`
       font-weight: 400;
       line-height: 47px;
       letter-spacing: 0em;
+      color:#fafafa;
     }
   }
   img {

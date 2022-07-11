@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import UserContext from "./UserContext";
 import axios from "axios";
-import Narutin from "../assets/narutin.png";
+import Narutin from "../assets/images/logoNarutin.png";
 
 export default function Pagamento() {
   const { login, setLogin } = useContext(UserContext);

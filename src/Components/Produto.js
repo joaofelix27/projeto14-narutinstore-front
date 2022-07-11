@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import UserContext from "./UserContext";
@@ -35,7 +35,7 @@ export default function Produto() {
     setChosenProducts(newProducts);
     const strProducts = JSON.stringify(newProducts);
     window.localStorage.setItem("Products", strProducts);
-    navigate("/payment")
+    navigate("/cart")
   }
 
   function descobreFrete(regiao) {
@@ -191,22 +191,23 @@ const Header = styled.div`
   align-items: center;
   position: fixed;
   top: 0;
-  height: 90px;
-  background: rgb(249, 125, 0);
-  background: linear-gradient(
+  height: 85px;
+  background: rgb(255, 161, 53);
+    background: linear-gradient(
     90deg,
-    rgba(249, 125, 0, 1) 37%,
-    rgba(255, 161, 53, 1) 74%,
-    rgba(255, 173, 40, 1) 92%
-  );
+    rgba(255, 161, 53, 1) 0%,
+    rgba(255, 158, 0, 1) 34%,
+    rgba(249, 125, 0, 1) 93%
+    );
   div {
-    margin-top: 17px;
+    margin-top: 2px;
     h1 {
       font-family: Permanent Marker;
       font-size: 32px;
       font-weight: 400;
       line-height: 47px;
       letter-spacing: 0em;
+      color:#fafafa;
     }
   }
   img {

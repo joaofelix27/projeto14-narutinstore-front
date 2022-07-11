@@ -1,20 +1,22 @@
-import { useState} from "react";
+import { useState, useContext} from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
 import logo from "../assets/images/logoNarutin.png"
+import UserContext from "./UserContext";
 
 export default function Cart() {
     const [frete, setFrete] = useState(0);
     const [cep, setCep] = useState("");
     const navigate = useNavigate();
+    const { viaCart, setViaCart } = useContext(UserContext);
     const formatter = new Intl.NumberFormat('pt-br', {
         style: 'currency',
         currency: 'BRL'
     });
 
     const inCart=eval(localStorage.getItem("Products"));
-    const loginData=localStorage.getItem("loginData")
+    const loginData=JSON.parse(localStorage.getItem("loginData"))
     function ProductCart({ image, name, value, quantity }) {
         return (
             <InCartProduct>
@@ -36,6 +38,7 @@ export default function Cart() {
             }
             else{
                 navigate("/login")
+                setViaCart(true)
             }
         }
     }
@@ -225,13 +228,17 @@ const Header = styled.header`
         font-family: 'Permanent Marker';
         font-weight: 400;
         font-size: 32px;
-        color:#000000;
+        color:#fafafa;
     }
 
     div{
         display:flex;
         align-items:center;
+        img {
+    width: 70px;
+  }
     }
+
 
     ion-icon{
         font-size: 32px;
@@ -247,14 +254,14 @@ const LoginIcon= styled.div`
     
     ion-icon{
         font-size: 24px;
-        color:#000000;
+        color:#fafafa;
         margin-bottom: 5px;
     }
 
     span{
         font-size: 8px;
         text-align: center;
-        margin-right: 15px;
+        margin-right: 15px;color:#fafafa;
     }
 `
 

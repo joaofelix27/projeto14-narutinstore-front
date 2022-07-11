@@ -9,7 +9,7 @@ export default function Home(){
     const[inventory, setInventory] = useState([]);
     const { viaCart, setViaCart } = useContext(UserContext);
     const navigate = useNavigate();
-    const loginData=localStorage.getItem("loginData")
+    const loginData=JSON.parse(localStorage.getItem("loginData"))
 
     useEffect(()=>{
     setViaCart(false)
@@ -102,17 +102,20 @@ const Header = styled.header`
         font-family: 'Permanent Marker';
         font-weight: 400;
         font-size: 32px;
-        color:#000000;
+        color:#fafafa;
     }
 
     div{
         display:flex;
         align-items:center;
+            img {
+    width: 70px;
+  }
     }
 
     ion-icon{
         font-size: 32px;
-        color:#000000;
+        color:#fafafa;
         margin-right: 15px;
     }
 `
@@ -194,7 +197,7 @@ const LoginIcon= styled.div`
     
     ion-icon{
         font-size: 24px;
-        color:#000000;
+        color:#fafafa;
         margin-bottom: 5px;
     }
 
@@ -202,5 +205,6 @@ const LoginIcon= styled.div`
         font-size: 8px;
         text-align: center;
         margin-right: 15px;
+        color:#fafafa;
     }
 `

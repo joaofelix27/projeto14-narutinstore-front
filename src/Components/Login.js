@@ -30,7 +30,7 @@ function Login() {
           window.localStorage.setItem("loginData", strLoginData);
           setLogin(loginData);
           if (viaCart) {
-            navigate("/cart");
+            navigate("/payment");
           } else {
             navigate("/");
           }
@@ -86,7 +86,6 @@ const Container = styled.div`
   align-items: center;
   width: 100%;
   height: 100vh;
-  cursor: pointer;
   padding-top: 159px;
 `;
 const Header = styled.div`
@@ -102,6 +101,7 @@ const Header = styled.div`
       font-weight: 400;
       line-height: 47px;
       letter-spacing: 0em;
+      color:#fafafa;
     }
   }
   img {
