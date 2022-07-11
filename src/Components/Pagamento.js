@@ -17,34 +17,31 @@ export default function Pagamento() {
   useEffect(() => {
     const productsLocal = window.localStorage.getItem("Products");
     const productsLocalOBJ = JSON.parse(productsLocal);
+    const loginData=JSON.parse(localStorage.getItem("loginData"))
+    setLogin(loginData)
     setChosenProducts(productsLocalOBJ);
   }, []);
 
   function buyProduct(event) {
     event.preventDefault();
 
-    if (email !== "") {
-      const URL = `http://localhost:5000/login`;
-      const profileData = {
-        email: email,
-        password: senha,
-      };
-      const promise = axios.post(URL, profileData);
+    config= {
+      headers: `Bearer ${login.token}`
+    }
+
+    if (chosenProducts) {
+      const URL = `http://localhost:5000/products`;
+      const productData = chosenProducts
+      const promise = axios.put(URL, productData, config);
       promise
         .then((response) => {
           const { data } = response;
           const loginData = { ...data };
-          const strLoginData = JSON.stringify(data);
-          window.localStorage.setItem("loginData", strLoginData);
-          setLogin(loginData);
-          if (viaCart) {
-            navigate("/cart");
-          } else {
             navigate("/");
           }
-        })
+        )
         .catch((err) => {
-          alert("Erro no Login, dados incorretos!");
+          alert("Erro na compra!");
         });
     }
   }
