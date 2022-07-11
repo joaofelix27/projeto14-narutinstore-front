@@ -13,12 +13,12 @@ export default function Pagamento() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const productsLocal = window.localStorage.getItem("Products");
-    const productsLocalOBJ = JSON.parse(productsLocal);
+    const productsLocalOBJ = JSON.parse(window.localStorage.getItem("Products"));
     const loginData=JSON.parse(localStorage.getItem("loginData"))
+    const value=JSON.parse(localStorage.getItem("TotalValue"))
     setLogin(loginData)
     setChosenProducts(productsLocalOBJ);
-
+    setTotalValue(value)
   }, []);
 
   function buyProduct(event) {

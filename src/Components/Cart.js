@@ -30,6 +30,8 @@ export default function Cart() {
     }
 
     function nextPage(){
+        const strTotalValue = JSON.stringify(totalValue);
+        window.localStorage.setItem("TotalValue", strTotalValue);
         if(Number(frete)===0){
             alert("Preencha o campo de CEP")
         }
