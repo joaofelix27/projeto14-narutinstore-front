@@ -12,13 +12,14 @@ import UserContext from "./UserContext";
 function App() {
   const [login, setLogin] = useState({});
   const [chosenProducts, setChosenProducts] = useState([]);
+  const [totalValue, setTotalValue] = useState(0);
   const [viaCart, setViaCart] = useState(false);
 
   const contextValue = {
     login,
     setLogin,
     chosenProducts,
-    setChosenProducts,viaCart,setViaCart
+    setChosenProducts,viaCart,setViaCart,totalValue,setTotalValue
   };
 
   return (

@@ -8,43 +8,40 @@ import Narutin from "../assets/images/logoNarutin.png";
 
 export default function Pagamento() {
   const { login, setLogin } = useContext(UserContext);
-  const { viaCart, setViaCart } = useContext(UserContext);
   const { chosenProducts, setChosenProducts } = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const { totalValue, setTotalValue } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    const productsLocal = window.localStorage.getItem("Products");
-    const productsLocalOBJ = JSON.parse(productsLocal);
+    const productsLocalOBJ = JSON.parse(window.localStorage.getItem("Products"));
+    const loginData=JSON.parse(localStorage.getItem("loginData"))
+    const value=JSON.parse(localStorage.getItem("TotalValue"))
+    setLogin(loginData)
     setChosenProducts(productsLocalOBJ);
+    setTotalValue(value)
   }, []);
 
   function buyProduct(event) {
     event.preventDefault();
 
-    if (email !== "") {
-      const URL = `http://localhost:5000/login`;
-      const profileData = {
-        email: email,
-        password: senha,
-      };
-      const promise = axios.post(URL, profileData);
+    const config = {
+      headers: { Authorization: `Bearer ${login.token}` },
+    };
+
+    console.log(config)
+    if (chosenProducts) {
+      const URL = `http://localhost:5000/products`;
+      const productData = chosenProducts
+      const promise = axios.put(URL, productData, config);
       promise
         .then((response) => {
           const { data } = response;
-          const loginData = { ...data };
-          const strLoginData = JSON.stringify(data);
-          window.localStorage.setItem("loginData", strLoginData);
-          setLogin(loginData);
-          if (viaCart) {
-            navigate("/cart");
-          } else {
+          localStorage.removeItem('Products')
             navigate("/");
           }
-        })
+        )
         .catch((err) => {
-          alert("Erro no Login, dados incorretos!");
+          alert("Erro na compra!");
         });
     }
   }
@@ -63,6 +60,7 @@ export default function Pagamento() {
               </>
             );
           })}
+           <h3>{`Valor total: ${totalValue}`}</h3>
         </BodyReview>
       </>
     );
@@ -75,26 +73,22 @@ export default function Pagamento() {
             type="text"
             placeholder="Nome impresso no cartão"
             required
-            onChange={(e) => setEmail(e.target.value)}
           ></input>
           <input
-            type="password"
+            type="number"
             placeholder="Digitos do cartão"
             required
-            onChange={(e) => setSenha(e.target.value)}
           ></input>
           <Codigo>
             <input
-              type="text"
+              type="number"
               placeholder="Código de segurança"
               required
-              onChange={(e) => setSenha(e.target.value)}
             ></input>
             <input
-              type="text"
+              type="number"
               placeholder="Validade"
               required
-              onChange={(e) => setSenha(e.target.value)}
             ></input>
           </Codigo>
           <button type="submit">Fechar Compra</button>
@@ -210,6 +204,15 @@ const BodyReview = styled.div`
     margin-right: 3px;
     font-family: Raleway;
     font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #000000;
+    text-align: left;
+  }
+  h3 {
+    margin-top: 4px;
+    font-family: Raleway;
+    font-size: 16px;
     font-weight: 700;
     line-height: 18px;
     color: #000000;

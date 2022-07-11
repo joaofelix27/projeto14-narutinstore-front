@@ -12,6 +12,7 @@ export default function Cart() {
     const [logOutBox, setLogOutBox] = useState(false)
     const [unLoged, setUnLoged]=useState(true)
     const { viaCart, setViaCart } = useContext(UserContext);
+    const { totalValue, setTotalValue } = useContext(UserContext);
     const formatter = new Intl.NumberFormat('pt-br', {
         style: 'currency',
         currency: 'BRL'
@@ -35,6 +36,8 @@ export default function Cart() {
     }
 
     function nextPage(){
+        const strTotalValue = JSON.stringify(totalValue);
+        window.localStorage.setItem("TotalValue", strTotalValue);
         if(Number(frete)===0){
             alert("Preencha o campo de CEP")
         }
@@ -64,6 +67,7 @@ export default function Cart() {
         for(let i of inCart){
             productsValue+=(i.value*i.quantityPurchased)
         }
+        setTotalValue(formatter.format(Number(frete)+productsValue))
         return (
             <Summary>
                 <Prices><span>Valor dos Produtos:</span><span>{formatter.format(productsValue)}</span></Prices>
@@ -77,6 +81,7 @@ export default function Cart() {
                 </NavigationBar>
             </Summary>
         )
+        
     }
 
     function descobreFrete(regiao) {
