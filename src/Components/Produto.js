@@ -121,7 +121,7 @@ export default function Produto() {
             <h2> {product.description}</h2>
             <div>
               <h1> {`R$ ${value}`}</h1>
-              <h3> {`Em estoque: ${product.quantity}`}</h3>
+              <h3> {product.quantity===0? "Esgotado!":`Em estoque: ${product.quantity}`}</h3>
             </div>
           </Value>
           <Purchase onSubmit={adicionarCarrinho}>
@@ -135,6 +135,7 @@ export default function Produto() {
               placeholder="Qntd"
               value={qtd}
               min="1"
+              max={product.quantity}
               onChange={(e) => setQtd(e.target.value)}
               title={"Digite a quantidade"}
             ></input>
