@@ -8,10 +8,8 @@ import Narutin from "../assets/images/logoNarutin.png";
 
 export default function Pagamento() {
   const { login, setLogin } = useContext(UserContext);
-  const { viaCart, setViaCart } = useContext(UserContext);
   const { chosenProducts, setChosenProducts } = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const { totalValue, setTotalValue } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,15 +18,17 @@ export default function Pagamento() {
     const loginData=JSON.parse(localStorage.getItem("loginData"))
     setLogin(loginData)
     setChosenProducts(productsLocalOBJ);
+
   }, []);
 
   function buyProduct(event) {
     event.preventDefault();
 
-    config= {
-      headers: `Bearer ${login.token}`
-    }
+    const config = {
+      headers: { Authorization: `Bearer ${login.token}` },
+    };
 
+    console.log(config)
     if (chosenProducts) {
       const URL = `http://localhost:5000/products`;
       const productData = chosenProducts
@@ -36,7 +36,7 @@ export default function Pagamento() {
       promise
         .then((response) => {
           const { data } = response;
-          const loginData = { ...data };
+          localStorage.removeItem('Products')
             navigate("/");
           }
         )
@@ -60,6 +60,7 @@ export default function Pagamento() {
               </>
             );
           })}
+           <h3>{`Valor total: ${totalValue}`}</h3>
         </BodyReview>
       </>
     );
@@ -72,26 +73,22 @@ export default function Pagamento() {
             type="text"
             placeholder="Nome impresso no cartão"
             required
-            onChange={(e) => setEmail(e.target.value)}
           ></input>
           <input
-            type="password"
+            type="number"
             placeholder="Digitos do cartão"
             required
-            onChange={(e) => setSenha(e.target.value)}
           ></input>
           <Codigo>
             <input
-              type="text"
+              type="number"
               placeholder="Código de segurança"
               required
-              onChange={(e) => setSenha(e.target.value)}
             ></input>
             <input
-              type="text"
+              type="number"
               placeholder="Validade"
               required
-              onChange={(e) => setSenha(e.target.value)}
             ></input>
           </Codigo>
           <button type="submit">Fechar Compra</button>
@@ -207,6 +204,15 @@ const BodyReview = styled.div`
     margin-right: 3px;
     font-family: Raleway;
     font-size: 14px;
+    font-weight: 500;
+    line-height: 18px;
+    color: #000000;
+    text-align: left;
+  }
+  h3 {
+    margin-top: 4px;
+    font-family: Raleway;
+    font-size: 16px;
     font-weight: 700;
     line-height: 18px;
     color: #000000;
