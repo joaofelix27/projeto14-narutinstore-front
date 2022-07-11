@@ -8,10 +8,13 @@ import logo from "../assets/images/logoNarutin.png"
 export default function Home(){
     const[inventory, setInventory] = useState([]);
     const { viaCart, setViaCart } = useContext(UserContext);
+    const [logOutBox, setLogOutBox] = useState(false)
+    const [unLoged, setUnLoged]=useState(true)
     const navigate = useNavigate();
     const loginData=JSON.parse(localStorage.getItem("loginData"))
 
     useEffect(()=>{
+    setUnLoged(!loginData)
     setViaCart(false)
     const promise = axios.get("http://localhost:5000/products");
     promise.then(response=>setInventory(response.data.sort((a,b)=>b.value-a.value)))
@@ -43,6 +46,29 @@ export default function Home(){
         return interestProduct.map(product=><Product id={product._id} image={product.image} name={product.name} value={product.value}/>)
     }
 
+    function userAction(){
+        if(unLoged){
+            navigate("/login")
+        }
+        else{
+            setLogOutBox(!logOutBox)
+        }
+    }
+
+    function logOut(){
+        localStorage.removeItem("Products");
+        localStorage.removeItem("loginData");
+        setUnLoged(true)
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${loginData.token}`
+            }
+        };
+        const promise = axios.delete("http://localhost:5000/sessions", config);
+        promise.then(()=>navigate("/"));
+    }
+
     return (
         <Main>
             <Header>
@@ -51,13 +77,14 @@ export default function Home(){
                     <h1>Narutin</h1>
                 </div>
                 <div>
-                    <LoginIcon>
-                        <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
-                        <span>{!loginData?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
-                    </LoginIcon>
                     <ion-icon name="cart" onClick={()=>navigate("/cart")}></ion-icon>
+                    <LoginIcon>
+                        <ion-icon name="person" onClick={()=>userAction()}></ion-icon>
+                        <span>{unLoged?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
+                    </LoginIcon>
                 </div>
             </Header>
+            {logOutBox?<LogOut onClick={()=>logOut()}>Sair</LogOut>:""}
             <SubTitle>Em destaque</SubTitle>
             <HighlightsList>
                 {renderHighlights()}
@@ -207,4 +234,15 @@ const LoginIcon= styled.div`
         margin-right: 15px;
         color:#fafafa;
     }
+`
+const LogOut= styled.div`
+    color:#000000;
+    font-weight: 400;
+    border-radius: 5px;
+    font-size:14px;
+    padding: 6px;
+    background-color: #ffffff;
+    position:fixed;
+    top:85px;
+    right:10px;
 `

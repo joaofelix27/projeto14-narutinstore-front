@@ -1,4 +1,4 @@
-import { useState, useContext} from "react";
+import { useState, useContext, useEffect} from "react";
 import { useNavigate, Link } from 'react-router-dom';
 import axios from "axios";
 import styled from "styled-components";
@@ -9,6 +9,8 @@ export default function Cart() {
     const [frete, setFrete] = useState(0);
     const [cep, setCep] = useState("");
     const navigate = useNavigate();
+    const [logOutBox, setLogOutBox] = useState(false)
+    const [unLoged, setUnLoged]=useState(true)
     const { viaCart, setViaCart } = useContext(UserContext);
     const formatter = new Intl.NumberFormat('pt-br', {
         style: 'currency',
@@ -17,6 +19,10 @@ export default function Cart() {
 
     const inCart=eval(localStorage.getItem("Products"));
     const loginData=JSON.parse(localStorage.getItem("loginData"))
+
+    useEffect(()=>{
+        setUnLoged(!loginData)
+    },[])
     function ProductCart({ image, name, value, quantity }) {
         return (
             <InCartProduct>
@@ -43,6 +49,15 @@ export default function Cart() {
         }
     }
 
+    function userAction(){
+        if(unLoged){
+            navigate("/login")
+        }
+        else{
+            setLogOutBox(!logOutBox)
+        }
+    }
+
     function ValuesSummary() {
         let productsValue=0;
 
@@ -63,6 +78,7 @@ export default function Cart() {
             </Summary>
         )
     }
+
     function descobreFrete(regiao) {
         let frete = 0;
         if (regiao === "N") {
@@ -112,6 +128,20 @@ export default function Cart() {
         }
     }
 
+    function logOut(){
+        localStorage.removeItem("Products");
+        localStorage.removeItem("loginData");
+        setUnLoged(true)
+
+        const config = {
+            headers: {
+                "Authorization": `Bearer ${loginData.token}`
+            }
+        };
+        const promise = axios.delete("http://localhost:5000/sessions", config);
+        promise.then(()=>navigate("/"));
+    }
+
     if(!inCart){
         return(
             <Main>
@@ -122,11 +152,12 @@ export default function Cart() {
                 </div>
                 <div>
                     <LoginIcon>
-                        <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
-                        <span>{!loginData?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
+                        <ion-icon name="person" onClick={()=>userAction()}></ion-icon>
+                        <span>{unLoged?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
                     </LoginIcon>
                 </div>
                 </Header>
+                {logOutBox?<LogOut onClick={()=>logOut()}>Sair</LogOut>:""}
                 <SubTitle>O seu carrinho está vazio.</SubTitle>
                 <NavigationBar>
                     <button onClick={()=>navigate("/")}>Continuar Comprando</button>
@@ -144,11 +175,12 @@ export default function Cart() {
                     </div>
                     <div>
                         <LoginIcon>
-                            <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
+                            <ion-icon name="person" onClick={()=>userAction()}></ion-icon>
                             <span>{!loginData?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
                         </LoginIcon>
                     </div>
                 </Header>
+                {logOutBox?<LogOut onClick={()=>logOut()}>Sair</LogOut>:""}
                 <SubTitle>Selecione o Endereço</SubTitle>
                 <SearchCEPBox>
                     <form onSubmit={descobreCEP}>
@@ -296,6 +328,7 @@ const SubTitle = styled.h1`
     font-size: 32px;
     color:#ffffff;
     margin-bottom: 20px;
+    text-align: center;
 `
 
 const InCartProduct = styled.div`
@@ -391,3 +424,15 @@ const CEP = styled.div`
     color: ${(props) => (props.frete === "" ? "#ff0000" : "#000000")};
   }
 `;
+
+const LogOut= styled.div`
+    color:#000000;
+    font-weight: 400;
+    border-radius: 5px;
+    font-size:14px;
+    padding: 6px;
+    background-color: #ffffff;
+    position:fixed;
+    top:85px;
+    right:10px;
+`
