@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import Narutin from "../assets/narutin.png";
+import Narutin from "../assets/images/logoNarutin.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Cadastro() {
