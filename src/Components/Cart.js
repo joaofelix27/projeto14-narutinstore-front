@@ -95,7 +95,6 @@ export default function Cart() {
                 promise
                     .then((response) => {
                         const { data } = response;
-                        console.log(data.ibge);
                         const URL2 = `https://servicodados.ibge.gov.br/api/v1/localidades/regioes/${data.ibge}`;
                         const promisseIBGE = axios.get(URL2);
                         promisseIBGE
