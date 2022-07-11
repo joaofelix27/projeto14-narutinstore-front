@@ -16,7 +16,7 @@ function Login() {
     event.preventDefault();
 
     if (email !== "") {
-      const URL = `http://localhost:5000/login`;
+      const URL = `https://narutinstore-api.herokuapp.com/login`;
       const profileData = {
         email: email,
         password: senha,

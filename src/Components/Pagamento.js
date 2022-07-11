@@ -30,7 +30,7 @@ export default function Pagamento() {
 
     console.log(config)
     if (chosenProducts) {
-      const URL = `http://localhost:5000/products`;
+      const URL = `https://narutinstore-api.herokuapp.com/products`;
       const productData = chosenProducts
       const promise = axios.put(URL, productData, config);
       promise

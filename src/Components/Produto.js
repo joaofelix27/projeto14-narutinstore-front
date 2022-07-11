@@ -88,7 +88,7 @@ export default function Produto() {
   }
 
   useEffect(() => {
-    const URL = `http://localhost:5000/products/${name}`;
+    const URL = `https://narutinstore-api.herokuapp.com/products/${name}`;
     const promise = axios.get(URL);
     promise
       .then((response) => {
@@ -104,8 +104,8 @@ export default function Produto() {
   return (
     <Container>
       <Header>
+        <div onClick={()=>navigate("/")}>
         <img src={Narutin} />
-        <div>
           <h1>Narutin</h1>
         </div>
       </Header>
@@ -201,6 +201,8 @@ const Header = styled.div`
     );
   div {
     margin-top: 2px;
+    display:flex;
+    align-items:center;
     h1 {
       font-family: Permanent Marker;
       font-size: 32px;
@@ -212,6 +214,7 @@ const Header = styled.div`
   }
   img {
     width: 70px;
+    margin-bottom: 2px;
   }
 `;
 const Body = styled.div`

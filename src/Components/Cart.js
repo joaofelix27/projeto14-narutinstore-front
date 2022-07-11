@@ -145,7 +145,7 @@ export default function Cart() {
                 "Authorization": `Bearer ${loginData.token}`
             }
         };
-        const promise = axios.delete("http://localhost:5000/sessions", config);
+        const promise = axios.delete("https://narutinstore-api.herokuapp.com/sessions", config);
         promise.then(()=>navigate("/"));
     }
 

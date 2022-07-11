@@ -16,7 +16,7 @@ export default function Home(){
     useEffect(()=>{
     setUnLoged(!loginData)
     setViaCart(false)
-    const promise = axios.get("http://localhost:5000/products");
+    const promise = axios.get("https://narutinstore-api.herokuapp.com/products");
     promise.then(response=>setInventory(response.data.sort((a,b)=>b.value-a.value)))
     },[]);
 
@@ -59,13 +59,14 @@ export default function Home(){
         localStorage.removeItem("Products");
         localStorage.removeItem("loginData");
         setUnLoged(true)
+        setLogOutBox(false)
 
         const config = {
             headers: {
                 "Authorization": `Bearer ${loginData.token}`
             }
         };
-        const promise = axios.delete("http://localhost:5000/sessions", config);
+        const promise = axios.delete("https://narutinstore-api.herokuapp.com/sessions", config);
         promise.then(()=>navigate("/"));
     }
 
