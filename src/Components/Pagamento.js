@@ -27,8 +27,6 @@ export default function Pagamento() {
     const config = {
       headers: { Authorization: `Bearer ${login.token}` },
     };
-
-    console.log(config)
     if (chosenProducts) {
       const URL = `https://narutinstore-api.herokuapp.com/products`;
       const productData = chosenProducts
@@ -38,6 +36,7 @@ export default function Pagamento() {
           const { data } = response;
           localStorage.removeItem('Products')
             navigate("/");
+            alert("Compra realizada com sucesso!");
           }
         )
         .catch((err) => {
