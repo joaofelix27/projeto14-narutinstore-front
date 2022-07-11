@@ -144,7 +144,6 @@ export default function Produto() {
                 <input
                   type="text"
                   placeholder="Digite seu CEP..."
-                  required
                   value={cep}
                   pattern="[0-9]+"
                   onChange={(e) => setCep(e.target.value)}
