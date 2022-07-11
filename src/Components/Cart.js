@@ -108,9 +108,11 @@ export default function Cart() {
             setFrete("");
         }
     }
-    return (
-        <Main>
-            <Header>
+
+    if(!inCart){
+        return(
+            <Main>
+                <Header>
                 <div onClick={() => navigate("/")}>
                     <img src={logo} alt="Logo narutin" />
                     <h1>Narutin</h1>
@@ -121,48 +123,71 @@ export default function Cart() {
                         <span>{!loginData?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
                     </LoginIcon>
                 </div>
-            </Header>
-            <SubTitle>Selecione o Endereço</SubTitle>
-            <SearchCEPBox>
-                <form onSubmit={descobreCEP}>
-                    <CEP frete={frete}>
-                        <input
-                            type="text"
-                            placeholder="Digite seu CEP..."
-                            required
-                            value={cep}
-                            pattern="[0-9]+"
-                            onChange={(e) => setCep(e.target.value)}
-                            title={"Digite apenas os 8 números do CEP"}
-                        ></input>
-                        <span>
-                            {" "}
-                            {frete === 0
-                                ? ""
-                                : frete === ""
-                                    ? "CEP Inválido!"
-                                    : `Valor do frete: R$ ${formatter.format(frete)}`}
-                        </span>
-                    </CEP>
-                    <NavigationBar>
-                    <button type="submit">OK</button>
-                    <a
-                        target="_blank"
-                        href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
-                    >
-                        Não lembro meu CEP
-                    </a>
-                    </NavigationBar>
-                </form>
-            </SearchCEPBox>
-            <SubTitle>Produtos</SubTitle>
-            <Summary>
-                {inCart.map(product=><ProductCart image={product.image} name={product.name} quantity={product.quantityPurchased} value={product.value} />)}
-            </Summary>
-            <SubTitle>Resumo</SubTitle>
-            <ValuesSummary />
-        </Main>
-    )
+                </Header>
+                <SubTitle>O seu carrinho está vazio.</SubTitle>
+                <NavigationBar>
+                    <button onClick={()=>navigate("/")}>Continuar Comprando</button>
+                </NavigationBar>
+            </Main>
+        )
+    }
+    else{
+        return (
+            <Main>
+                <Header>
+                    <div onClick={() => navigate("/")}>
+                        <img src={logo} alt="Logo narutin" />
+                        <h1>Narutin</h1>
+                    </div>
+                    <div>
+                        <LoginIcon>
+                            <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
+                            <span>{!loginData?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
+                        </LoginIcon>
+                    </div>
+                </Header>
+                <SubTitle>Selecione o Endereço</SubTitle>
+                <SearchCEPBox>
+                    <form onSubmit={descobreCEP}>
+                        <CEP frete={frete}>
+                            <input
+                                type="text"
+                                placeholder="Digite seu CEP..."
+                                required
+                                value={cep}
+                                pattern="[0-9]+"
+                                onChange={(e) => setCep(e.target.value)}
+                                title={"Digite apenas os 8 números do CEP"}
+                            ></input>
+                            <span>
+                                {" "}
+                                {frete === 0
+                                    ? ""
+                                    : frete === ""
+                                        ? "CEP Inválido!"
+                                        : `Valor do frete: R$ ${formatter.format(frete)}`}
+                            </span>
+                        </CEP>
+                        <NavigationBar>
+                        <button type="submit">OK</button>
+                        <a
+                            target="_blank"
+                            href="https://buscacepinter.correios.com.br/app/endereco/index.php?t"
+                        >
+                            Não lembro meu CEP
+                        </a>
+                        </NavigationBar>
+                    </form>
+                </SearchCEPBox>
+                <SubTitle>Produtos</SubTitle>
+                <Summary>
+                    {inCart.map(product=><ProductCart image={product.image} name={product.name} quantity={product.quantityPurchased} value={product.value} />)}
+                </Summary>
+                <SubTitle>Resumo</SubTitle>
+                <ValuesSummary />
+            </Main>
+        )
+    }
 }
 
 const Main = styled.div`
