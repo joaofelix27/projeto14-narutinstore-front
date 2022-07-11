@@ -6,13 +6,14 @@ import UserContext from "./UserContext";
 import axios from "axios";
 import Narutin from "../assets/narutin.png";
 
-function Login() {
+export default function Pagamento() {
   const { login, setLogin } = useContext(UserContext);
   const { viaCart, setViaCart } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
-  function fazerLogin(event) {
+
+  function buyProduct(event) {
     event.preventDefault();
 
     if (email !== "") {
@@ -41,23 +42,23 @@ function Login() {
     }
   }
 
-  function montarFormularioLogin() {
+  function montarFormCreditCard() {
     return (
       <>
         <form>
           <input
-            type="email"
-            placeholder="E-mail"
+            type="text"
+            placeholder="Nome impresso no cartão"
             required
             onChange={(e) => setEmail(e.target.value)}
           ></input>
           <input
             type="password"
-            placeholder="Senha"
+            placeholder="Digitos do cartão"
             required
             onChange={(e) => setSenha(e.target.value)}
           ></input>
-          <button type="submit">Entrar</button>
+          <button type="submit">Fechar Compra</button>
         </form>
         <Link to="/register" style={{ textDecoration: "none" }}>
           <h1>Primeira vez? Cadastre-se!</h1>
@@ -66,7 +67,7 @@ function Login() {
     );
   }
 
-  const formularioLogin = montarFormularioLogin();
+  const formCreditCard = montarFormCreditCard();
   return (
     <Container>
       <Header>
@@ -75,19 +76,17 @@ function Login() {
           <h1>Narutin</h1>
         </div>
       </Header>
-      <FormularioLogin onSubmit={fazerLogin}>{formularioLogin}</FormularioLogin>
+      <FormularioLogin onSubmit={buyProduct}>{formCreditCard}</FormularioLogin>
     </Container>
   );
 }
-export default Login;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 100%;
-  height: 100vh;
-  cursor: pointer;
-  padding-top: 159px;
+  min-height:100vh;
+  padding-top: 95px;
+  background-color: #000000;
 `;
 const Header = styled.div`
   display: flex;
@@ -102,10 +101,11 @@ const Header = styled.div`
       font-weight: 400;
       line-height: 47px;
       letter-spacing: 0em;
+      color: #fafafa;
     }
   }
   img {
-    width: 70px;
+    height: 100px;
   }
 `;
 const FormularioLogin = styled.div`
@@ -121,7 +121,13 @@ const FormularioLogin = styled.div`
     height: 58px;
     width: 326px;
     border-radius: 5px;
-    background-color: #000000;
+    background: rgb(249, 125, 0);
+    background: linear-gradient(
+      90deg,
+      rgba(249, 125, 0, 1) 37%,
+      rgba(255, 161, 53, 1) 74%,
+      rgba(255, 173, 40, 1) 92%
+    );
     border: 0px;
     margin-bottom: 13px;
     font-family: Raleway;
@@ -131,7 +137,6 @@ const FormularioLogin = styled.div`
     letter-spacing: 0em;
     text-align: left;
     color: #ffffff;
-
     padding: 16px;
   }
   button {

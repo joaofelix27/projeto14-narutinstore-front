@@ -179,7 +179,6 @@ const Container = styled.div`
   align-items: center;
   min-height:100vh;
   padding-top: 95px;
-  padding-bottom: 100px;
   background-color: #000000;
 `;
 const Header = styled.div`

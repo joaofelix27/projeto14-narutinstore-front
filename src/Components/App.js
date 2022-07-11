@@ -5,17 +5,19 @@ import Cadastro from "./Cadastro";
 import Login from "./Login";
 import Produto from "./Produto";
 import Home from "./Home";
+import Pagamento from './Pagamento'
 import UserContext from "./UserContext";
 
 function App() {
   const [login, setLogin] = useState({});
   const [chosenProducts, setChosenProducts] = useState([]);
+  const [viaCart, setViaCart] = useState(false);
 
   const contextValue = {
     login,
     setLogin,
     chosenProducts,
-    setChosenProducts,
+    setChosenProducts,viaCart,setViaCart
   };
 
   return (
@@ -27,6 +29,7 @@ function App() {
             <Route path="/register" element={<Cadastro />} />
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/payment" element={<Pagamento />} />
             <Route path="/products/:name" element={<Produto />} />
           </Routes>
         </BrowserRouter>
