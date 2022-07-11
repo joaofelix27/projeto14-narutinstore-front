@@ -19,9 +19,13 @@ export default function Produto() {
   function adicionarCarrinho(event) {
     setQtd("");
     event.preventDefault()
-    const newProducts = [...chosenProducts];
+    const strNewProducts = window.localStorage.getItem("Products");
+    let newProducts = JSON.parse(strNewProducts);
+    if (!newProducts){
+      newProducts=[]
+    }
     const currentProduct = {... product}
-    const repeatedProduct=  chosenProducts.findIndex( value => value.name===product.name )
+    const repeatedProduct=  newProducts.findIndex( value => value.name===product.name )
     if (repeatedProduct !==-1) {
       newProducts[repeatedProduct].quantityPurchased+=Number(qtd)
     } else {
@@ -31,7 +35,7 @@ export default function Produto() {
     setChosenProducts(newProducts);
     const strProducts = JSON.stringify(newProducts);
     window.localStorage.setItem("Products", strProducts);
-    navigate("/cart")
+    navigate("/payment")
   }
 
   function descobreFrete(regiao) {
@@ -179,7 +183,6 @@ const Container = styled.div`
   align-items: center;
   min-height: 100vh;
   padding-top: 95px;
-  padding-bottom: 100px;
   background-color: #000000;
 `;
 const Header = styled.div`

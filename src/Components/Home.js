@@ -1,15 +1,18 @@
-import { useState, useEffect} from "react";
+import { useState, useEffect, useContext} from "react";
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
+import UserContext from "./UserContext";
 import styled from "styled-components";
 import logo from "../assets/images/logoNarutin.png"
 
 export default function Home(){
     const[inventory, setInventory] = useState([]);
+    const { viaCart, setViaCart } = useContext(UserContext);
     const navigate = useNavigate();
     const loginData=localStorage.getItem("loginData")
 
     useEffect(()=>{
+    setViaCart(false)
     const promise = axios.get("http://localhost:5000/products");
     promise.then(response=>setInventory(response.data.sort((a,b)=>b.value-a.value)))
     },[]);

@@ -1,13 +1,14 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import {  useState, useContext } from "react";
+import { useState, useContext } from "react";
 import UserContext from "./UserContext";
 import axios from "axios";
 import Narutin from "../assets/images/logoNarutin.png";
 
 function Login() {
   const { login, setLogin } = useContext(UserContext);
+  const { viaCart, setViaCart } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
@@ -21,16 +22,22 @@ function Login() {
         password: senha,
       };
       const promise = axios.post(URL, profileData);
-      promise.then((response) => {
-        const { data} =response
-        const loginData= {... data}
-        const strLoginData = JSON.stringify(data);
-        window.localStorage.setItem("loginData", strLoginData);
-        setLogin(loginData)
-        navigate("/")
-      }).catch((err) => {
-        alert("Erro no Login, dados incorretos!");
-      });
+      promise
+        .then((response) => {
+          const { data } = response;
+          const loginData = { ...data };
+          const strLoginData = JSON.stringify(data);
+          window.localStorage.setItem("loginData", strLoginData);
+          setLogin(loginData);
+          if (viaCart) {
+            navigate("/cart");
+          } else {
+            navigate("/");
+          }
+        })
+        .catch((err) => {
+          alert("Erro no Login, dados incorretos!");
+        });
     }
   }
 
@@ -38,11 +45,21 @@ function Login() {
     return (
       <>
         <form>
-          <input type="email" placeholder="E-mail" required onChange={(e) => setEmail(e.target.value)}></input>
-          <input type="password" placeholder="Senha" required onChange={(e) => setSenha(e.target.value)}></input>
+          <input
+            type="email"
+            placeholder="E-mail"
+            required
+            onChange={(e) => setEmail(e.target.value)}
+          ></input>
+          <input
+            type="password"
+            placeholder="Senha"
+            required
+            onChange={(e) => setSenha(e.target.value)}
+          ></input>
           <button type="submit">Entrar</button>
         </form>
-        <Link to="/register" style={{ textDecoration: 'none' }} >
+        <Link to="/register" style={{ textDecoration: "none" }}>
           <h1>Primeira vez? Cadastre-se!</h1>
         </Link>
       </>
