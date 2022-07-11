@@ -6,6 +6,7 @@ import Login from "./Login";
 import Produto from "./Produto";
 import Home from "./Home";
 import Pagamento from './Pagamento'
+import Cart from "./Cart";
 import UserContext from "./UserContext";
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/payment" element={<Pagamento />} />
             <Route path="/products/:name" element={<Produto />} />
+            <Route path="/cart" element={<Cart/>} />
           </Routes>
         </BrowserRouter>
       </UserContext.Provider>

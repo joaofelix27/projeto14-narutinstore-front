@@ -9,6 +9,7 @@ export default function Home(){
     const[inventory, setInventory] = useState([]);
     const { viaCart, setViaCart } = useContext(UserContext);
     const navigate = useNavigate();
+    const loginData=localStorage.getItem("loginData")
 
     useEffect(()=>{
     setViaCart(false)
@@ -31,13 +32,13 @@ export default function Home(){
     }
 
     function renderHighlights(){
-        const highlights= inventory.slice(0,5);
+        const highlights= inventory.slice(0,6);
 
         return highlights.map(product=><Product id={product._id} image={product.image} name={product.name} value={product.value}/>)
     }
 
     function renderInterestProduct(){
-        const interestProduct= inventory.slice(5,20);
+        const interestProduct= inventory.slice(6,20);
 
         return interestProduct.map(product=><Product id={product._id} image={product.image} name={product.name} value={product.value}/>)
     }
@@ -50,7 +51,10 @@ export default function Home(){
                     <h1>Narutin</h1>
                 </div>
                 <div>
-                    <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
+                    <LoginIcon>
+                        <ion-icon name="person" onClick={()=>navigate("/login")}></ion-icon>
+                        <span>{!loginData?"Faça o Login":`Olá, ${loginData.name.split(" ")[0]}`}</span>
+                    </LoginIcon>
                     <ion-icon name="cart" onClick={()=>navigate("/cart")}></ion-icon>
                 </div>
             </Header>
@@ -80,7 +84,13 @@ const Main = styled.div`
 const Header = styled.header`
     width: 100%;
     height: 85px;
-    background-color: #F47213;
+    background: rgb(255, 161, 53);
+    background: linear-gradient(
+    90deg,
+    rgba(255, 161, 53, 1) 0%,
+    rgba(255, 158, 0, 1) 34%,
+    rgba(249, 125, 0, 1) 93%
+    );
     display: flex;
     justify-content: space-between;
     align-items:center;
@@ -129,7 +139,13 @@ const ProductBox= styled.div`
     min-height:210px;
     width: 170px;
     word-wrap: break-word;
-    background-color: #F47213;
+    background: rgb(255, 161, 53);
+    background: linear-gradient(
+    90deg,
+    rgba(255, 161, 53, 1) 0%,
+    rgba(255, 158, 0, 1) 34%,
+    rgba(249, 125, 0, 1) 93%
+    );
     display:flex;
     flex-direction: column;
     justify-content: space-between;
@@ -167,5 +183,24 @@ const GridProdutos= styled.div`
         margin-left:10px;
         margin-right: 10px;
         margin-top: 20px;
+    }
+`
+
+const LoginIcon= styled.div`
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    max-width: 42px;
+    
+    ion-icon{
+        font-size: 24px;
+        color:#000000;
+        margin-bottom: 5px;
+    }
+
+    span{
+        font-size: 8px;
+        text-align: center;
+        margin-right: 15px;
     }
 `

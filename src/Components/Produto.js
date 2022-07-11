@@ -3,7 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import UserContext from "./UserContext";
-import Narutin from "../assets/narutin.png";
+import Narutin from "../assets/images/logoNarutin.png";
 import { useNavigate } from "react-router-dom";
 
 export default function Produto() {
@@ -181,7 +181,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height:100vh;
+  min-height: 100vh;
   padding-top: 95px;
   background-color: #000000;
 `;
