@@ -19,9 +19,13 @@ export default function Produto() {
   function adicionarCarrinho(event) {
     setQtd("");
     event.preventDefault()
-    const newProducts = [...chosenProducts];
+    const strNewProducts = window.localStorage.getItem("Products");
+    let newProducts = JSON.parse(strNewProducts);
+    if (!newProducts){
+      newProducts=[]
+    }
     const currentProduct = {... product}
-    const repeatedProduct=  chosenProducts.findIndex( value => value.name===product.name )
+    const repeatedProduct=  newProducts.findIndex( value => value.name===product.name )
     if (repeatedProduct !==-1) {
       newProducts[repeatedProduct].quantityPurchased+=Number(qtd)
     } else {

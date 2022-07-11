@@ -53,13 +53,13 @@ export default function Pagamento() {
       <>
         <h1>RESUMO</h1>
         <BodyReview>
-          <h2>Eae</h2>
-
           {chosenProducts.map((value) => {
             return (
               <>
-                <h2>{value.quantityPurchased}</h2>
-                <h2>{value.name}</h2>
+                <div>
+                  <h2>{`(${value.quantityPurchased}x)`}</h2>
+                  <h2>{value.name}</h2>
+                </div>
               </>
             );
           })}
@@ -132,10 +132,19 @@ const Container = styled.div`
   background-color: #000000;
 `;
 const Header = styled.div`
+  position: fixed;
+  top: 0;
   display: flex;
   align-items: center;
+  width: 100%;
   justify-content: center;
-  width: 150px;
+  background: rgb(249, 125, 0);
+  background: linear-gradient(
+    90deg,
+    rgba(249, 125, 0, 1) 37%,
+    rgba(255, 161, 53, 1) 74%,
+    rgba(255, 173, 40, 1) 92%
+  );
   div {
     margin-top: 17px;
     h1 {
@@ -154,15 +163,16 @@ const Header = styled.div`
 const Body = styled.div`
   display: flex;
   flex-direction: column;
-  width:100%;
+  width: 100%;
   align-items: center;
-  justify-content:center;
-  padding:0 12px;
+  justify-content: center;
+  padding: 0 12px;
   padding-top: 20px;
   background-color: #000000;
+  margin-top:60px;
 `;
 const Review = styled.div`
-  width:100%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -184,23 +194,31 @@ const Review = styled.div`
   }
 `;
 const BodyReview = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   margin-top: 10px;
-  width:100%;
-  min-height:80px;
-  background-color:#fafafa;
-  border-radius:10px;
+  width: 100%;
+  min-height: 40px;
+  background-color: #fafafa;
+  border-radius: 10px;
+  padding: 6px;
+  div {
+    display: flex;
+  }
   h2 {
+    margin-right: 3px;
     font-family: Raleway;
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 700;
     line-height: 18px;
     color: #000000;
-    text-align: center;
+    text-align: left;
   }
 `;
 const FormPayment = styled.div`
   padding-top: 24px;
-  width:100%;
+  width: 100%;
   form {
     display: flex;
     flex-direction: column;
