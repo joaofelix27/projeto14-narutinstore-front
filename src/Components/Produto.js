@@ -31,7 +31,7 @@ export default function Produto() {
     setChosenProducts(newProducts);
     const strProducts = JSON.stringify(newProducts);
     window.localStorage.setItem("Products", strProducts);
-    navigate("/cart")
+    navigate("/payment")
   }
 
   function descobreFrete(regiao) {

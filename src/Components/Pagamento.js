@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import UserContext from "./UserContext";
 import axios from "axios";
 import Narutin from "../assets/narutin.png";
@@ -9,9 +9,16 @@ import Narutin from "../assets/narutin.png";
 export default function Pagamento() {
   const { login, setLogin } = useContext(UserContext);
   const { viaCart, setViaCart } = useContext(UserContext);
+  const { chosenProducts, setChosenProducts } = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const productsLocal = window.localStorage.getItem("Products");
+    const productsLocalOBJ = JSON.parse(productsLocal);
+    setChosenProducts(productsLocalOBJ);
+  }, []);
 
   function buyProduct(event) {
     event.preventDefault();
@@ -41,7 +48,25 @@ export default function Pagamento() {
         });
     }
   }
+  function montarReview() {
+    return (
+      <>
+        <h1>RESUMO</h1>
+        <BodyReview>
+          <h2>Eae</h2>
 
+          {chosenProducts.map((value) => {
+            return (
+              <>
+                <h2>{value.quantityPurchased}</h2>
+                <h2>{value.name}</h2>
+              </>
+            );
+          })}
+        </BodyReview>
+      </>
+    );
+  }
   function montarFormCreditCard() {
     return (
       <>
@@ -58,6 +83,20 @@ export default function Pagamento() {
             required
             onChange={(e) => setSenha(e.target.value)}
           ></input>
+          <Codigo>
+            <input
+              type="text"
+              placeholder="Código de segurança"
+              required
+              onChange={(e) => setSenha(e.target.value)}
+            ></input>
+            <input
+              type="text"
+              placeholder="Validade"
+              required
+              onChange={(e) => setSenha(e.target.value)}
+            ></input>
+          </Codigo>
           <button type="submit">Fechar Compra</button>
         </form>
         <Link to="/register" style={{ textDecoration: "none" }}>
@@ -68,6 +107,7 @@ export default function Pagamento() {
   }
 
   const formCreditCard = montarFormCreditCard();
+  const review = montarReview();
   return (
     <Container>
       <Header>
@@ -76,7 +116,10 @@ export default function Pagamento() {
           <h1>Narutin</h1>
         </div>
       </Header>
-      <FormularioLogin onSubmit={buyProduct}>{formCreditCard}</FormularioLogin>
+      <Body>
+        <Review>{review}</Review>
+        <FormPayment onSubmit={buyProduct}>{formCreditCard}</FormPayment>
+      </Body>
     </Container>
   );
 }
@@ -84,8 +127,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height:100vh;
-  padding-top: 95px;
+  min-height: 100vh;
+  padding-top: 30px;
   background-color: #000000;
 `;
 const Header = styled.div`
@@ -108,8 +151,56 @@ const Header = styled.div`
     height: 100px;
   }
 `;
-const FormularioLogin = styled.div`
+const Body = styled.div`
+  display: flex;
+  flex-direction: column;
+  width:100%;
+  align-items: center;
+  justify-content:center;
+  padding:0 12px;
+  padding-top: 20px;
+  background-color: #000000;
+`;
+const Review = styled.div`
+  width:100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  h1 {
+    font-family: Permanent Marker;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 47px;
+    letter-spacing: 0em;
+    color: #fafafa;
+    font-family: Permanent Marker;
+    font-size: 32px;
+    font-weight: 400;
+    line-height: 47px;
+    letter-spacing: 0em;
+    color: #fafafa;
+  }
+`;
+const BodyReview = styled.div`
+  margin-top: 10px;
+  width:100%;
+  min-height:80px;
+  background-color:#fafafa;
+  border-radius:10px;
+  h2 {
+    font-family: Raleway;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 18px;
+    color: #000000;
+    text-align: center;
+  }
+`;
+const FormPayment = styled.div`
   padding-top: 24px;
+  width:100%;
   form {
     display: flex;
     flex-direction: column;
@@ -119,7 +210,7 @@ const FormularioLogin = styled.div`
 
   input {
     height: 58px;
-    width: 326px;
+    width: 100%;
     border-radius: 5px;
     background: rgb(249, 125, 0);
     background: linear-gradient(
@@ -131,19 +222,19 @@ const FormularioLogin = styled.div`
     border: 0px;
     margin-bottom: 13px;
     font-family: Raleway;
-    font-size: 20px;
+    font-size: 14px;
     font-weight: 400;
     line-height: 23px;
     letter-spacing: 0em;
     text-align: left;
     color: #ffffff;
-    padding: 16px;
+    padding: 8px;
   }
   button {
     border: 0px;
     background-color: #ea8b1c;
     height: 46px;
-    width: 326px;
+    width: 100%;
     border-radius: 5px;
     font-family: Raleway;
     font-size: 20px;
@@ -161,5 +252,15 @@ const FormularioLogin = styled.div`
     line-height: 18px;
     color: #000000;
     text-align: center;
+  }
+`;
+const Codigo = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  input {
+    width: 48%;
+    background-color: blue;
   }
 `;
